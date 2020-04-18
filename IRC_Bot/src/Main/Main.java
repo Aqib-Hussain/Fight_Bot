@@ -22,6 +22,7 @@ class Main {
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new Scanner(socket.getInputStream());
 
+        // Bot name and Server
         write("Nick", "FightBot");
         write("USER", "FightBot 8 * :Aqib's bot v0.1" );
         write("JOIN", "#TheBois");
