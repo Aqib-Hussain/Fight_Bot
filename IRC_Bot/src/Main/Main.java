@@ -49,18 +49,20 @@ class Main {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
             //replace server name with variable
-            if (serverMessage.equals(":selsey.nsqdc.city.ac.uk 366 FightBot #TheBois :End of NAMES list")) {
+            if (serverMessage.startsWith(":selsey.nsqdc.city.ac.uk 366")) {
                 break;
             }
         }
 
 
-        //Check that messages are being sent
+        //Check that messages are being sent and then output commands
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
-            if (serverMessage.equals("PING :selsey.nsqdc.city.ac.uk")){
-                write("PRIVMSG ", "#TheBois  : FightBot is ready to go!");
+            // Keeps the bot in the server
+            if (serverMessage.startsWith("PING")) {
+                String pingContents = serverMessage.split(" ")[1].replace(":", "");
+                write("PONG ", pingContents);
             }
 
             String[] prefixArray = serverMessage.split(":");
@@ -72,9 +74,19 @@ class Main {
 
                     if (arrayOfServerMessages.length > 1) {
                         // Commands are checked for here
-                        if (arrayOfServerMessages[1].toLowerCase().equals("help")){
+                        if (arrayOfServerMessages[1].toLowerCase().equals("help")) {
                             write("PRIVMSG ", "#TheBois  : ");
                         }
+                        // Leave the server when requested
+                        if (arrayOfServerMessages[1].toLowerCase().equals("leave")) {
+                            write("PRIVMSG ", "#TheBois  : Bye Everyone!");
+                            write("QUIT ", "#TheBois");
+                        }
+                        // Displays the local time
+//                        if (arrayOfServerMessages[1].toLowerCase().equals("time")) {
+//                            write("PRIVMSG ", "#TheBois  : Bye Everyone!");
+//                            write("TIME","#help");
+//                        }
                         // Fight command activated here
                         if (arrayOfServerMessages[1].toLowerCase().equals("fight")) {
                             fight.setWinner(null);
@@ -82,21 +94,25 @@ class Main {
                             fight.setUser1HP(100);
                             fight.initiateFight(arrayOfServerMessages, prefixArray);
                             write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " Has declared war on " + fight.getUser2());
+                            write("PRIVMSG ", "#TheBois  : ");
+                            // While neither user is defeated
                             while (fight.getUser1HP() > 0 && fight.getUser2HP() > 0) {
                                 TimeUnit.SECONDS.sleep(1);
                                 fight.calculateDamageUser1();
-                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1());
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1() + " HP");
                                 if (fight.getUser2HP() < 0) {
                                     fight.setUser2HP(0);
                                 }
                                 write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " has: " + fight.getUser2HP() + " HP");
+                                write("PRIVMSG ", "#TheBois  : ");
                                 TimeUnit.SECONDS.sleep(1);
                                 fight.calculateDamageUser2();
-                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2());
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2() + " HP");
                                 if (fight.getUser1HP() < 0) {
                                     fight.setUser1HP(0);
                                 }
                                 write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " has: " + fight.getUser1HP() + " HP");
+                                write("PRIVMSG ", "#TheBois  : ");
                             }
                             write("PRIVMSG ", "#TheBois  : The winner is " + fight.getWinner() + " Congratulations!");
 
