@@ -43,12 +43,12 @@ class Main {
         write("USER", "FightBot 8 * :Aqib's bot v0.1");
         write("JOIN", "#TheBois");
 
-        //Initial loop to check that into messages have played
+        //Initial loop to check that intro messages have played
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
             //replace server name with variable
-            if (serverMessage.equals(":selsey.nsqdc.city.ac.uk 366 FightBot #thebois :End of NAMES list")) {
+            if (serverMessage.equals(":selsey.nsqdc.city.ac.uk 366 FightBot #TheBois :End of NAMES list")) {
                 break;
             }
         }

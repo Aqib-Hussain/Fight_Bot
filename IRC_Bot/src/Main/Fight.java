@@ -10,6 +10,7 @@ public class Fight {
 
     public void initiateFight(String[] arrayOfServerMessages){
         userArray = arrayOfServerMessages[1].split("!");
+        System.out.println(arrayOfServerMessages);
         user1 = userArray[0];
         user2 = arrayOfServerMessages[2];
         System.out.println(user1);
