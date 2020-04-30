@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static Main.Bro.bro;
 
@@ -18,7 +19,7 @@ class Main {
     public static int brocount = 0;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Scanner console = new Scanner(System.in);
         Fight fight = new Fight();
 
@@ -53,30 +54,59 @@ class Main {
             }
         }
 
+
         //Check that messages are being sent
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
+            if (serverMessage.equals("PING :selsey.nsqdc.city.ac.uk")){
+                write("PRIVMSG ", "#TheBois  : FightBot is ready to go!");
+            }
 
             String[] prefixArray = serverMessage.split(":");
             if (prefixArray.length > 2) {
 
                 String[] arrayOfServerMessages = prefixArray[2].split(" ");
 
-                if (arrayOfServerMessages[0].equals("FightBot")) {
+                if (arrayOfServerMessages[0].toLowerCase().equals("fightbot")) {
 
                     if (arrayOfServerMessages.length > 1) {
                         // Commands are checked for here
-
+                        if (arrayOfServerMessages[1].toLowerCase().equals("help")){
+                            write("PRIVMSG ", "#TheBois  : ");
+                        }
                         // Fight command activated here
-                        if (arrayOfServerMessages[1].equals("fight")) {
-                            fight.initiateFight(arrayOfServerMessages);
-                            //insert fight here
+                        if (arrayOfServerMessages[1].toLowerCase().equals("fight")) {
+                            fight.setWinner(null);
+                            fight.setUser1HP(100);
+                            fight.setUser1HP(100);
+                            fight.initiateFight(arrayOfServerMessages, prefixArray);
+                            write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " Has declared war on " + fight.getUser2());
+                            while (fight.getUser1HP() > 0 && fight.getUser2HP() > 0) {
+                                TimeUnit.SECONDS.sleep(1);
+                                fight.calculateDamageUser1();
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1());
+                                if (fight.getUser2HP() < 0) {
+                                    fight.setUser2HP(0);
+                                }
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " has: " + fight.getUser2HP() + " HP");
+                                TimeUnit.SECONDS.sleep(1);
+                                fight.calculateDamageUser2();
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2());
+                                if (fight.getUser1HP() < 0) {
+                                    fight.setUser1HP(0);
+                                }
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " has: " + fight.getUser1HP() + " HP");
+                            }
+                            write("PRIVMSG ", "#TheBois  : The winner is " + fight.getWinner() + " Congratulations!");
+
                         }
 
                         // Bro command activated here
-                        if (arrayOfServerMessages[1].equals("BRO")) {
-                            Bro.incrementBro(brocount);
+                        if (arrayOfServerMessages[1].toUpperCase().equals("BRO")) {
+                            if (brocount < 200) {
+                                Bro.incrementBro(brocount);
+                            }
                             write("PRIVMSG ", "#TheBois  : " + bro);
                             brocount++;
                         }
