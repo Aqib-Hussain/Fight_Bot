@@ -15,11 +15,12 @@ class Main {
     private static String channelName;
     private static PrintWriter out;
     private static Scanner in;
-
     public static int brocount = 0;
+
 
     public static void main(String[] args) throws IOException {
         Scanner console = new Scanner(System.in);
+        Fight fight = new Fight();
 
 //        System.out.println("Enter the IP Address: ");
 //        ipAddress = console.nextLine();
@@ -59,22 +60,27 @@ class Main {
 
             String[] prefixArray = serverMessage.split(":");
             if (prefixArray.length > 2) {
-                System.out.println("hi");
+
                 String[] arrayOfServerMessages = prefixArray[2].split(" ");
 
                 if (arrayOfServerMessages[0].equals("FightBot")) {
-                    System.out.println("bbbbbbbbbbb");
+
                     if (arrayOfServerMessages.length > 1) {
                         // Commands are checked for here
+
+                        // Fight command activated here
                         if (arrayOfServerMessages[1].equals("fight")) {
+                            fight.initiateFight(arrayOfServerMessages);
                             //insert fight here
                         }
-                        if (arrayOfServerMessages[1].equals("bro")) {
-                            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+                        // Bro command activated here
+                        if (arrayOfServerMessages[1].equals("BRO")) {
                             Bro.incrementBro(brocount);
                             write("PRIVMSG ", "#TheBois  : " + bro);
                             brocount++;
                         }
+
                         //insert more commands here
                     }
                 }
