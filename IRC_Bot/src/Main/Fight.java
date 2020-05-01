@@ -1,7 +1,6 @@
 package Main;
 
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Fight {
@@ -40,7 +39,7 @@ public class Fight {
             attack = "tickles ";
         }
         if (attackType == 2) {
-            attack = "pushes ";
+            attack = "pokes ";
         }
         if (attackType == 3) {
             attack = "punches ";
