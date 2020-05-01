@@ -23,6 +23,8 @@ class Main {
         Scanner console = new Scanner(System.in);
         Fight fight = new Fight();
 
+        String dateTime;
+
 //        System.out.println("Enter the IP Address: ");
 //        ipAddress = console.nextLine();
 //        System.out.println("Enter the port number: ");
@@ -57,9 +59,11 @@ class Main {
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
+
             // Keeps the bot in the server
             if (serverMessage.startsWith("PING")) {
                 String pingContents = serverMessage.split(" ")[1].replace(":", "");
+                System.out.println(serverMessage);
                 write("PONG ", pingContents);
             }
 
@@ -74,9 +78,10 @@ class Main {
                         // Commands are checked for here
                         if (arrayOfServerMessages[1].toLowerCase().equals("help")) {
                             write("PRIVMSG ", channelName + " : // Here's a list of commands FightBot can use");
-                            write("PRIVMSG ", channelName + " : // Fight <username> : declares a fight with the selected user");
+                            write("PRIVMSG ", channelName + " : // Fight <username> : declares a war with the selected user");
                             write("PRIVMSG ", channelName + " : // Bro : FightBot bros out with you");
-                            write("PRIVMSG ", channelName + " : // Time : FightBot tells you the time");
+                            write("PRIVMSG ", channelName + " : // DateTime : FightBot tells you the date and time");
+                            write("PRIVMSG ", channelName + " : // Users : FightBot checks how many users and channels there are");
                             write("PRIVMSG ", channelName + " : // Leave : FightBot leaves the channel");
                         }
                         // Leave the server when requested
@@ -84,11 +89,22 @@ class Main {
                             write("PRIVMSG ", channelName + " : Bye Everyone!");
                             write("QUIT ", channelName);
                         }
-                        // Displays the local time
-                        if (arrayOfServerMessages[1].toLowerCase().equals("time")) {
-                            write("PRIVMSG ", channelName + " : The time is:");
-                            write("TIME", ":selsey.nsqdc.city.ac.uk");
+                        // Displays the local date and time
+                        if (arrayOfServerMessages[1].toLowerCase().equals("datetime")) {
+
+                            write("TIME ", ":selsey.nsqdc.city.ac.uk");
+
+//                            System.out.println(Arrays.toString(arrayOfServerMessages));
+//                            dateTime = arrayOfServerMessages[1];
+//                            write("PRIVMSG ", channelName + " : " + dateTime);
+
                         }
+
+                        // check the users on the channel
+                        if (arrayOfServerMessages[1].toLowerCase().equals("users")) {
+                            write("LUSERS ", channelName);
+                        }
+
                         // Fight command activated here
                         if (arrayOfServerMessages[1].toLowerCase().equals("fight")) {
                             fight.setWinner(null);
@@ -100,7 +116,7 @@ class Main {
                             // While neither user is defeated
                             while (fight.getUser1HP() > 0 && fight.getUser2HP() > 0) {
                                 if (fight.getUser1HP() > 0) {
-                                    TimeUnit.SECONDS.sleep((long) 1.5);
+                                    TimeUnit.SECONDS.sleep(2);
                                     fight.calculateDamageUser1();
                                     write("PRIVMSG ", channelName + " : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1() + " damage!");
                                     if (fight.getUser2HP() < 0) {
@@ -110,7 +126,7 @@ class Main {
                                     write("PRIVMSG ", channelName + " : ");
                                 }
                                 if (fight.getUser2HP() > 0) {
-                                    TimeUnit.SECONDS.sleep((long) 1.5);
+                                    TimeUnit.SECONDS.sleep(2);
                                     fight.calculateDamageUser2();
                                     write("PRIVMSG ", channelName + " : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2() + " damage!");
                                     if (fight.getUser1HP() < 0) {
@@ -120,7 +136,7 @@ class Main {
                                     write("PRIVMSG ", channelName + " : ");
                                 }
                             }
-                            write("PRIVMSG ", channelName + " : The winner is " + fight.getWinner() + " Congratulations!");
+                            write("PRIVMSG ", channelName + " : The winner is " + fight.getWinner() + ", congratulations!");
 
                         }
 

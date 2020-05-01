@@ -39,28 +39,28 @@ public class Fight {
             attack = "tickles ";
         }
         if (attackType == 2) {
-            attack = "pokes ";
+            attack = "pokes";
         }
         if (attackType == 3) {
-            attack = "punches ";
+            attack = "punches";
         }
         if (attackType == 4) {
-            attack = "kicks ";
+            attack = "dropkicks";
         }
         if (attackType == 5) {
-            attack = "applies a Sharpshooter on ";
+            attack = "applies a Sharpshooter on";
         }
         if (attackType == 6) {
-            attack = "pulls out MR SOCKO on ";
+            attack = "pulls out MR SOCKO on";
         }
         if (attackType == 7) {
-            attack = "Elbow drops ";
+            attack = "Elbow drops";
         }
         if (attackType == 8) {
-            attack = "Stone Cold Stunners ";
+            attack = "Stone Cold Stunners";
         }
         if (attackType == 9) {
-            attack = "pulls guard on ";
+            attack = "pulls guard on";
         }
     }
 
