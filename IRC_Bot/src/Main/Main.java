@@ -40,7 +40,7 @@ class Main {
 //        write("Nick", "FightBot");
 //        write("USER", "FightBot 8 * :Aqib's bot v0.1" );
 //        write("JOIN", "#" + channelName);
-        write("Nick", "FightBot");
+        write("NICK", "FightBot");
         write("USER", "FightBot 8 * :Aqib's bot v0.1");
         write("JOIN", "#TheBois");
 
@@ -99,7 +99,7 @@ class Main {
                             while (fight.getUser1HP() > 0 && fight.getUser2HP() > 0) {
                                 TimeUnit.SECONDS.sleep(1);
                                 fight.calculateDamageUser1();
-                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1() + " HP");
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser1() + " " + fight.getAttack() + " " + fight.getUser2() + " for " + fight.getDamageResultUser1() + " damage");
                                 if (fight.getUser2HP() < 0) {
                                     fight.setUser2HP(0);
                                 }
@@ -107,7 +107,7 @@ class Main {
                                 write("PRIVMSG ", "#TheBois  : ");
                                 TimeUnit.SECONDS.sleep(1);
                                 fight.calculateDamageUser2();
-                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2() + " HP");
+                                write("PRIVMSG ", "#TheBois  : " + fight.getUser2() + " " + fight.getAttack() + " " + fight.getUser1() + " for " + fight.getDamageResultUser2() + " damage");
                                 if (fight.getUser1HP() < 0) {
                                     fight.setUser1HP(0);
                                 }
