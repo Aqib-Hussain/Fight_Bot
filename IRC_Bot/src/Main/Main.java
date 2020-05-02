@@ -44,7 +44,7 @@ class Main {
         write("JOIN", channelName);
 
 
-        //Initial loop to check that intro messages have played
+        // Initial loop to check that intro messages have played
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
@@ -54,8 +54,10 @@ class Main {
             }
         }
 
+        // Intro message upon joining the channel
+        write("NOTICE ", channelName + " : FightBot is here!");
 
-        //Check that messages are being sent and then output commands
+        // Check that messages are being sent and then output commands
         while (in.hasNext()) {
             String serverMessage = in.nextLine();
             System.out.println("<<< " + serverMessage);
@@ -78,7 +80,7 @@ class Main {
                         // Commands are checked for here
                         if (arrayOfServerMessages[1].toLowerCase().equals("help")) {
                             write("PRIVMSG ", channelName + " : // Here's a list of commands FightBot can use");
-                            write("PRIVMSG ", channelName + " : // Fight <username> : declares a war with the selected user");
+                            write("PRIVMSG ", channelName + " : // Fight <username> : declares a war on the selected user");
                             write("PRIVMSG ", channelName + " : // Bro : FightBot bros out with you");
                             write("PRIVMSG ", channelName + " : // DateTime : FightBot tells you the date and time");
                             write("PRIVMSG ", channelName + " : // Users : FightBot checks how many users and channels there are");
@@ -93,9 +95,7 @@ class Main {
                         if (arrayOfServerMessages[1].toLowerCase().equals("datetime")) {
 
                             write("TIME ", ":selsey.nsqdc.city.ac.uk");
-
-//                            System.out.println(Arrays.toString(arrayOfServerMessages));
-//                            dateTime = arrayOfServerMessages[1];
+//                            dateTime = prefixArray[1];
 //                            write("PRIVMSG ", channelName + " : " + dateTime);
 
                         }
@@ -148,8 +148,6 @@ class Main {
                             write("PRIVMSG ", channelName + " : " + bro);
                             brocount++;
                         }
-
-                        //insert more commands here
                     }
                 }
             }
