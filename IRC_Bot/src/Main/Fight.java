@@ -4,7 +4,6 @@ package Main;
 import java.util.Random;
 
 public class Fight {
-    private String[] userArray;
     private String user1;
     private String user2;
     private int user1HP = 100;
@@ -16,14 +15,14 @@ public class Fight {
     private int attackType;
     private String attack;
     private String winner;
+    private String loser;
 
-    public Fight() {
-    }
+
 
     // Initiate the fight
     public void initiateFight(String[] arrayOfServerMessages, String[] prefixArray) {
         // Assign user 1 to attacker, user 2 to attacked
-        userArray = prefixArray[1].split("!");
+        String[] userArray = prefixArray[1].split("!");
         user1 = userArray[0];
         if (arrayOfServerMessages.length > 2) {
             user2 = arrayOfServerMessages[2];
@@ -176,7 +175,7 @@ public class Fight {
             }
         }
         winnerFound();
-
+        loserFound();
     }
 
     public void winnerFound(){
@@ -187,9 +186,24 @@ public class Fight {
         }
     }
 
+    public void loserFound(){
+        if (user1HP <= 0){
+            loser = user1;
+        } else {
+            loser = user2;
+        }
+    }
+
+    public void setFightState(){
+        setWinner(null);
+        setUser1HP(100);
+        setUser2HP(100);
+    }
+
     public int getUser1HP() {
         return user1HP;
     }
+
 
     public void setUser1HP(int user1HP) {
         this.user1HP = user1HP;
@@ -229,5 +243,13 @@ public class Fight {
 
     public void setWinner(String winner) {
         this.winner = winner;
+    }
+
+    public String getLoser() {
+        return loser;
+    }
+
+    public void setLoser(String loser) {
+        this.loser = loser;
     }
 }
