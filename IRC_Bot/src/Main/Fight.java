@@ -18,7 +18,6 @@ public class Fight {
     private String loser;
 
 
-
     // Initiate the fight
     public void initiateFight(String[] arrayOfServerMessages, String[] prefixArray) {
         // Assign user 1 to attacker, user 2 to attacked
@@ -33,6 +32,7 @@ public class Fight {
         user2HP = 100;
     }
 
+    // Calculate which attack will be used
     private void calculateAttackType() {
         if (attackType == 1) {
             attack = "tickles ";
@@ -63,6 +63,7 @@ public class Fight {
         }
     }
 
+    // Calculate the damage dealt by User1
     public void calculateDamageUser1() {
         Random r = new Random();
         low = 1;
@@ -118,8 +119,10 @@ public class Fight {
             }
         }
         winnerFound();
+        loserFound();
     }
 
+    // Calculate the damage dealt by User2
     public void calculateDamageUser2() {
         Random s = new Random();
         low = 1;
@@ -178,40 +181,39 @@ public class Fight {
         loserFound();
     }
 
-    public void winnerFound(){
-        if (user1HP <= 0){
+    // Checks who is the winner
+    public void winnerFound() {
+        if (user1HP <= 0) {
             winner = user2;
         } else {
             winner = user1;
         }
     }
 
-    public void loserFound(){
-        if (user1HP <= 0){
+    // Checks who is the loser
+    public void loserFound() {
+        if (user1HP <= 0) {
             loser = user1;
         } else {
             loser = user2;
         }
     }
 
-    public void setFightState(){
+    // Reset the state of the fight
+    public void setFightState() {
         setWinner(null);
+        setLoser(null);
         setUser1HP(100);
         setUser2HP(100);
     }
 
-    public int getUser1HP() {
-        return user1HP;
-    }
-
+    public int getUser1HP() { return user1HP; }
 
     public void setUser1HP(int user1HP) {
         this.user1HP = user1HP;
     }
 
-    public int getUser2HP() {
-        return user2HP;
-    }
+    public int getUser2HP() { return user2HP; }
 
     public void setUser2HP(int user2HP) {
         this.user2HP = user2HP;
@@ -245,11 +247,7 @@ public class Fight {
         this.winner = winner;
     }
 
-    public String getLoser() {
-        return loser;
-    }
+    public String getLoser() { return loser; }
 
-    public void setLoser(String loser) {
-        this.loser = loser;
-    }
+    public void setLoser(String loser) { this.loser = loser; }
 }

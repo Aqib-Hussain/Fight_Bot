@@ -3,7 +3,6 @@ package Main;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -17,13 +16,13 @@ class Main {
     private static PrintWriter out;
     private static Scanner in;
     public static int brocount = 0;
-    public static boolean messageSent;
-    static Fight fight = new Fight();
+    public static boolean timeMessageSent;
+    public static boolean usersMessageSent;
     public static String dateTime = "";
+    static Fight fight = new Fight();
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Scanner console = new Scanner(System.in);
-
 
         System.out.println("Enter the IP Address: ");
         ipAddress = console.nextLine();
@@ -36,7 +35,6 @@ class Main {
 
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new Scanner(socket.getInputStream());
-
 
         // Bot name and Server
         write("NICK", "FightBot");
@@ -70,15 +68,24 @@ class Main {
             }
 
             // Checks if the time message has been sent
-            if (messageSent) {
-                write("PRIVMSG ", channelName + " : " + prefixArray[2] + ":" + prefixArray[3]);
-                messageSent = false;
+            if (timeMessageSent) {
+                if (serverMessage.contains("391")) {
+                    write("PRIVMSG ", channelName + " : " + prefixArray[2] + ":" + prefixArray[3]);
+                    timeMessageSent = false;
+                }
+            }
+            // Checks if the user message has been sent
+            if (usersMessageSent) {
+                if (serverMessage.contains("255")) {
+                    write("PRIVMSG ", channelName + " : " + prefixArray[2]);
+                    usersMessageSent = false;
+                }
             }
 
             if (prefixArray.length > 2) {
 
                 String[] arrayOfServerMessages = prefixArray[2].split(" ");
-
+                // Check for the fightbot prefix
                 if (arrayOfServerMessages[0].toLowerCase().equals("fightbot")) {
 
                     if (arrayOfServerMessages.length > 1) {
@@ -87,10 +94,10 @@ class Main {
                             write("PRIVMSG ", channelName + " : // Here's a list of commands FightBot can use");
                             write("PRIVMSG ", channelName + " : // Fight <username> : declares a war on the selected user");
                             write("PRIVMSG ", channelName + " : // DeathBattle <username> : declares a war on the selected user with MUCH higher stakes (bot must have op)");
-                            write("PRIVMSG ", channelName + " : // Kick <username> : FightBot purges the channel of weaklings (bot must have op)");
+                            write("PRIVMSG ", channelName + " : // Boot <username> : FightBot purges the channel of weaklings (bot must have op)");
                             write("PRIVMSG ", channelName + " : // Bro : FightBot bros out with you");
                             write("PRIVMSG ", channelName + " : // DateTime : FightBot tells you the date and time");
-                            write("PRIVMSG ", channelName + " : // Users : FightBot checks how many users and channels there are");
+                            write("PRIVMSG ", channelName + " : // Users : FightBot checks how many users there are on the server");
                             write("PRIVMSG ", channelName + " : // Leave : FightBot leaves the channel to find stronger competitors");
                         }
                         // Leave the server when requested
@@ -99,18 +106,19 @@ class Main {
                             write("QUIT ", channelName);
                         }
                         // Display the time upon request
-                        if (arrayOfServerMessages[1].equals("datetime")) {
-                            messageSent = true;
+                        if (arrayOfServerMessages[1].toLowerCase().equals("datetime")) {
+                            timeMessageSent = true;
                             write("TIME ", "");
                         }
                         // Kicks a user from the channel if bot is op
-                        if (arrayOfServerMessages[1].toLowerCase().equals("kick")) {
+                        if (arrayOfServerMessages[1].toLowerCase().equals("boot")) {
                             String[] userArray = prefixArray[1].split("!");
-                            write("KICK ", channelName + " " + arrayOfServerMessages[2] + " : Upon request of " + userArray[0]);
+                            write("KICK ", channelName + " " + arrayOfServerMessages[2] + " :Upon request of " + userArray[0]);
                             write("PRIVMSG ", channelName + " : Sorry " + arrayOfServerMessages[2] + " you were too weak for this channel");
                         }
-                        // check the users on the channel
+                        // Check the users on the channel
                         if (arrayOfServerMessages[1].toLowerCase().equals("users")) {
+                            usersMessageSent = true;
                             write("LUSERS ", channelName);
                         }
                         // Fight command activated here
@@ -151,7 +159,7 @@ class Main {
         out.close();
         socket.close();
     }
-
+    // Sends a message to the server
     public static void write(String command, String message) {
         String fullMessage = command + " " + message;
         System.out.println(">>> " + fullMessage);
@@ -159,6 +167,7 @@ class Main {
         out.flush();
     }
 
+    // FightLogic is computed here
     private static void fightLogic() throws InterruptedException {
         while (fight.getUser1HP() > 0 && fight.getUser2HP() > 0) {
             if (fight.getUser1HP() > 0) {
